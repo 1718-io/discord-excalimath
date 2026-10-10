@@ -11,10 +11,30 @@ test('app shell fits the viewport without toolbar/canvas overlap', async ({ page
   const app = page.locator('#storybook-root main');
   const toolbar = app.locator('aside');
   const canvas = app.locator('section');
+  const themeButton = app.getByRole('button', { name: /Choose a random .* theme/ });
+  const modeButton = app.getByRole('button', { name: /Switch to night dark mode/ });
 
   await expect(app).toBeVisible({ timeout: 15_000 });
   await expect(toolbar).toBeVisible();
   await expect(canvas).toBeVisible();
+  await expect(themeButton).toBeVisible();
+
+  expect(await app.getAttribute('data-theme-mode')).toBe('day');
+  await themeButton.click();
+  await expect(app).toHaveAttribute('data-theme-mode', 'day');
+  await expect(app).toHaveAttribute('data-theme', /^day-/);
+
+  await modeButton.click();
+  await expect(app).toHaveAttribute('data-theme-mode', 'night');
+  await expect(app).toHaveAttribute('data-theme', /^night-/);
+
+  await app.getByRole('button', { name: /Choose a random .* theme/ }).click();
+  await expect(app).toHaveAttribute('data-theme-mode', 'night');
+  await expect(app).toHaveAttribute('data-theme', /^night-/);
+
+  await app.getByRole('button', { name: /Switch to day light mode/ }).click();
+  await expect(app).toHaveAttribute('data-theme-mode', 'day');
+  await expect(app).toHaveAttribute('data-theme', /^day-/);
 
   const viewport = page.viewportSize();
   const documentSize = await page.evaluate(() => ({
