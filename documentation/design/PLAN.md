@@ -200,11 +200,16 @@ Prepare the app to run as a Discord Activity inside an iframe and use the Discor
 - Create the Discord activity bootstrap logic
 - Connect app state to the Discord environment
 - Make the app aware of being run inside Discord
+- Keep `/` as the standalone web-app entry point and add `/discord` as the Discord Activity entry point
+- Reuse the same app and whiteboard implementation on both routes; initialize the Discord SDK only for the Activity route
+- If Discord launches the mapped root URL inside its iframe, hand off to `/discord` while leaving normal top-level browser visits at `/`
 
 ### Exact work to do
 - Add the SDK and initialization logic
 - Create a small provider or bootstrap component
 - Read activity context and session metadata where available
+- Capture the Activity instance ID and channel/guild context when exposed by the SDK; defer OAuth token exchange that requires a secure backend to a later step
+- Document that production hosting must serve the SPA for both routes and configure Discord URL mapping to reach the Activity entry point
 - Keep this logic isolated from the whiteboard behavior
 - Do not clutter the canvas UI with Discord-specific details
 
@@ -220,6 +225,8 @@ Expected result:
 - The app boots without SDK initialization errors
 - The app shell still renders correctly
 - No console errors on initial load
+- `/` runs as the standalone app without attempting Discord initialization
+- `/discord` initializes the SDK in Discord and reports a useful fallback state when opened outside Discord
 
 ### Completion condition
 The app loads as a Discord-ready frontend shell while still being runnable locally in development.
@@ -287,31 +294,50 @@ Make the whiteboard state synchronized between users in the same room.
 ### Exact work to do
 - Create a room/session connection layer in the frontend
 - Use WebSocket messaging for state sync
-- Bind canvas events to event serialization
-- Keep the room and activity context aligned with Discord session data
+- Bind Excalidraw scene changes to validated scene snapshot serialization
+- Hydrate a newly joined client with the latest room snapshot and apply remote updates without adding them to local undo history
+- Use the Discord Activity instance ID as the room key; allow standalone local testing with a `?room=` query
+- Show actual connecting/synced/reconnecting/error state rather than a placeholder live status
+- Make the WebSocket endpoint configurable; use `ws://` for local development and `wss://` behind a public Discord Activity URL mapping in deployment
+- Add an end-to-end two-client test that draws on one board and checks that the other receives the update
+- Keep authentication and trusted room authorization as a separate security task before production deployment
 
 ### Local dev run (for verification)
-Start both services:
+Start the backend in one terminal:
 
 ```powershell
-cd .\backend
-pnpm dev
+npx --yes pnpm@12.10.1 -C backend dev
 ```
 
-In a second terminal:
+Then start the frontend in another terminal and open the same local room in two tabs (localhost defaults to `local-development`):
 
 ```powershell
-cd .\frontend
-pnpm dev --host 0.0.0.0
+npx --yes pnpm@12.10.1 -C frontend dev --host 0.0.0.0
+```
+
+Automated end-to-end sync check (starts isolated backend and frontend test servers):
+
+```powershell
+npx --yes pnpm@12.10.1 -C frontend test:routes
 ```
 
 Expected result:
 - The frontend can open the room connection
 - The backend receives connection events
+- Both standalone clients can join the same `?room=` room and board changes propagate
+- Discord Activity clients use their shared Activity instance ID as the room key
+- A new client receives the latest board snapshot
+- The two-client browser test draws on one Excalidraw board and observes a remote revision on the other
 - The client does not crash when the room sync is active
 
 ### Completion condition
 The frontend and backend communicate correctly for collaborative room state.
+
+### Bear in mind
+
+The route test starts isolated local frontend and backend servers. Setup and commands are documented in README.md and README.md; the Step 7 scope is updated in PLAN.md.
+
+Room state is still in-memory, and the server does not yet authenticate clients or validate Discord membership. Those are production-security and persistence tasks—not part of this frontend connection step.
 
 ### To continue
 Reply with: "ok you can code that"

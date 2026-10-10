@@ -139,6 +139,18 @@ In short, the design must prioritize stability and clarity over decorative expan
 ## Frontend architecture
 The frontend is a React application built around Excalidraw and ExcaliMath, adapted for Discord Activity use.
 
+### Dual entry points: standalone web app and Discord Activity
+The same ExcaliMath application must support two entry points without maintaining duplicate board implementations:
+
+- `/` is the conventional standalone web-app experience. It remains usable without Discord, the Embedded App SDK, or Discord credentials.
+- `/discord` is the Discord Activity entry point. It initializes the Embedded App SDK and reads Activity context such as the instance, channel, and guild identifiers when Discord provides them.
+- Both routes render the same shared whiteboard and product UI. Only the Activity bootstrap/context differs.
+- SDK initialization is isolated to the Activity route. A standalone browser visit must never wait for a Discord RPC handshake or fail because Discord is unavailable.
+- If Discord launches the mapped root URL in an iframe, the root entry detects the embedded launch and hands off to `/discord`; ordinary top-level visits remain at `/`.
+- Hosting must serve the SPA entry document for both `/` and `/discord`. Discord URL mapping and any deployment rewrites must preserve this route behavior.
+
+This architecture does not jeopardize Activity support. It provides a clear standalone fallback while keeping Discord-specific lifecycle, identity, and session concerns out of the regular web entry point.
+
 ### Frontend stack
 - React
 - Tailwind CSS

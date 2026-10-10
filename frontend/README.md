@@ -145,6 +145,40 @@ Open the local URL printed by Vite, usually `http://localhost:5173`. The host op
 
 > If port 5173 is already occupied, Vite selects the next available port and prints that URL.
 
+### Standalone and Discord Activity routes
+
+The app uses the same board implementation for both entry points:
+
+- `http://localhost:5173/` opens the standalone web app. It does not initialize the Discord SDK.
+- `http://localhost:5173/discord` is the Discord Activity entry point. Open it inside Discord to complete the Embedded App SDK handshake. Opening it in a normal browser shows a clear “Open in Discord” state while leaving the board available for preview.
+- If Discord loads the mapped root route `/` inside its iframe, the app changes that embedded route to `/discord`. Normal top-level browser visits stay on `/`.
+
+To configure the public Discord Application Client ID, copy `.env.example` to `.env.local` and set `VITE_DISCORD_CLIENT_ID`.
+
+GNU/Linux and Git Bash:
+
+```bash
+cp .env.example .env.local
+```
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Edit `.env.local` and replace the example value with the Client ID from the Discord Developer Portal, then restart Vite. This Client ID is intended for frontend use; never place a Client Secret, bot token, or OAuth access token in a `VITE_` variable. The Activity currently reads instance/channel/guild context only. OAuth authorization and token exchange are deferred until a secure backend endpoint exists.
+
+For Discord Activity testing, enable Activities for a Discord application and configure its Activity URL mapping with `/` mapped to your public HTTPS host (for example, a development tunnel). This matches Discord's root entry flow: if it opens `/` inside the Activity iframe, the app hands off to `/discord`; top-level browser visits remain on `/`. The SPA host must serve the same app entry document for `/` and `/discord`. See [Discord local development and URL mapping](https://docs.discord.com/developers/activities/development-guides/local-development).
+
+Test both routes and the embedded-root handoff locally:
+
+```sh
+pnpm -C frontend test:routes
+```
+
+This command starts an isolated local WebSocket backend and Vite server. It verifies standalone/Activity route behavior and opens two app clients in one `?room=` room, draws on one Excalidraw canvas, and checks that the other client receives the update. You can also run it manually by starting `pnpm -C backend dev` and `pnpm -C frontend dev` in separate terminals, then opening `http://localhost:5173/?room=my-room` in two browser tabs.
+
 ## Build and preview
 
 Type-check and produce a production Vite build:
@@ -233,6 +267,8 @@ pnpm -C frontend test:responsive --reporter=line
 - `stories/ResponsiveMatrix.stories.tsx` — Storybook app story
 - `playwright.config.ts` — viewport matrix and managed Storybook server
 - `tests/responsive.spec.ts` — browser-level responsive assertions
+- `tests/routes.spec.ts` — standalone, Activity fallback, and embedded-root route checks
+- `src/ActivityEntry.tsx` — Discord-only SDK initialization and Activity context
 - `.storybook/` — Storybook configuration
 
 ## License

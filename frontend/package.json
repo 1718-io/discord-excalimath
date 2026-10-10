@@ -11,7 +11,8 @@
     "storybook:build": "storybook build -o storybook-static",
     "test:responsive": "playwright test",
     "test:responsive:headed": "playwright test --headed",
-    "test:responsive:ui": "playwright test --ui"
+    "test:responsive:ui": "playwright test --ui",
+    "test:routes": "playwright test --config playwright.routes.config.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,8 @@
   "packageManager": "pnpm@12.10.1",
   "type": "module",
   "dependencies": {
+    "@discord/embedded-app-sdk": "^2.5.0",
+    "@excalidraw/excalidraw": "^0.18.1",
     "lucide-react": "^1.55.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

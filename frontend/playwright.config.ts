@@ -22,6 +22,7 @@ const viewportMatrix = [
 
 export default defineConfig({
   testDir: './tests',
+  testMatch: 'responsive.spec.ts',
   timeout: 30_000,
   expect: {
     timeout: 10_000,

@@ -302,9 +302,15 @@ jobs:
       - run:
           name: Install dependencies
           command: pnpm -C frontend install --frozen-lockfile
+        - run:
+          name: Install backend dependencies
+          command: pnpm -C backend install --frozen-lockfile
       - run:
           name: Build app
           command: pnpm -C frontend build
+        - run:
+          name: Build and test backend
+          command: pnpm -C backend build && pnpm -C backend test
       - run:
           name: Build Storybook
           command: pnpm -C frontend storybook:build
@@ -314,6 +320,9 @@ jobs:
       - run:
           name: Run responsive tests
           command: pnpm -C frontend test:responsive --reporter=line
+        - run:
+          name: Run standalone and room-sync browser tests
+          command: pnpm -C frontend test:routes
 
 workflows:
   responsive-checks:
@@ -326,7 +335,7 @@ Connect the CircleCI project to the repository and enable pull-request pipelines
 ---
 
 ## GitHub Actions CI/CD workflow
-The repository includes a GitHub Actions workflow at [.github/workflows/responsive-matrix.yml](.github/workflows/responsive-matrix.yml).
+The repository includes a GitHub Actions workflow at [.github/workflows/responsive-matrix.yml](.github/workflows/responsive-matrix.yml). It validates the frontend viewport matrix and the backend's WebSocket integration with a browser-level two-client scene sync test.
 
 It runs on:
 - push to main and develop
@@ -334,11 +343,13 @@ It runs on:
 - manual workflow dispatch
 
 It performs:
-1. dependency install
-2. application build
-3. Storybook production build
-4. Playwright browser install
-5. responsive matrix test execution
+1. frontend and backend dependency installs
+2. frontend production build
+3. backend TypeScript build and WebSocket tests
+4. Storybook production build
+5. Playwright browser install
+6. responsive viewport matrix tests
+7. standalone/Discord route and two-client room-sync browser tests
 
 The workflow allows the layout checks to run in a clean CI environment, which is the same environment your app will likely run in once deployed.
 
@@ -347,10 +358,14 @@ These are the same commands the GitHub workflow executes:
 
 ```bash
 pnpm -C frontend install --frozen-lockfile
+pnpm -C backend install --frozen-lockfile
 pnpm -C frontend build
+pnpm -C backend build
+pnpm -C backend test
 pnpm -C frontend storybook:build
 pnpm -C frontend exec playwright install --with-deps chromium
 pnpm -C frontend test:responsive --reporter=line
+pnpm -C frontend test:routes
 ```
 
 ### GitHub Actions example
@@ -375,11 +390,18 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: |
+            frontend/pnpm-lock.yaml
+            backend/pnpm-lock.yaml
       - run: pnpm -C frontend install --frozen-lockfile
+      - run: pnpm -C backend install --frozen-lockfile
       - run: pnpm -C frontend build
+      - run: pnpm -C backend build
+      - run: pnpm -C backend test
       - run: pnpm -C frontend storybook:build
       - run: pnpm -C frontend exec playwright install --with-deps chromium
       - run: pnpm -C frontend test:responsive --reporter=line
+      - run: pnpm -C frontend test:routes
 ```
 
 ---

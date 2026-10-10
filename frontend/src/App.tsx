@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import { Dices, Moon, Sun } from 'lucide-react';
+import Board, { type BoardSyncStatus } from './Board';
 
 const toolbarItems = ['Pen', 'Text', 'Shapes', 'Math', 'Erase'];
 
@@ -40,6 +41,16 @@ const themes = themeFamilies.flatMap((family) =>
 type ThemeMode = 'day' | 'night';
 type Theme = { name: string; hue: number; saturation: number; mode: ThemeMode };
 type ThemeCSSProperties = CSSProperties & { [property: `--${string}`]: string | number };
+type ActivityStatus = 'standalone' | 'connecting' | 'ready' | 'unavailable';
+type ActivityContext = { instanceId: string; channelId: string | null; guildId: string | null };
+
+type AppProps = {
+  activityStatus?: ActivityStatus;
+  activityContext?: ActivityContext;
+  activityMessage?: string;
+  roomId?: string;
+  roomServerUrl?: string;
+};
 
 const darkThemes: Theme[] = themes.map((theme) => ({ ...theme, mode: 'night' }));
 const lightThemes: Theme[] = themes.map((theme) => ({ ...theme, mode: 'day' }));
@@ -63,10 +74,24 @@ const getThemeStyle = (theme: Theme, mode: ThemeMode): ThemeCSSProperties => ({
   '--accent-glow': mode === 'night' ? `hsl(${theme.hue} ${theme.saturation}% 55% / 0.16)` : `hsl(${theme.hue} ${theme.saturation}% 48% / 0.1)`,
 });
 
-export default function App() {
+export default function App({
+  activityStatus = 'standalone',
+  activityContext,
+  activityMessage,
+  roomId,
+  roomServerUrl,
+}: AppProps) {
   const [mode, setMode] = useState<ThemeMode>('day');
   const [activeTheme, setActiveTheme] = useState<Theme>(defaultTheme);
+  const [roomSyncStatus, setRoomSyncStatus] = useState<BoardSyncStatus>(roomId ? 'connecting' : 'idle');
   const themeStyle = getThemeStyle(activeTheme, mode);
+  const roomStatusLabel: Record<BoardSyncStatus, string> = {
+    idle: 'Sync off',
+    connecting: 'Connecting',
+    connected: 'Synced',
+    reconnecting: 'Reconnecting',
+    error: 'Sync unavailable',
+  };
 
   const chooseRandomTheme = () => {
     const availableThemes = mode === 'day' ? lightThemes : darkThemes;
@@ -93,6 +118,10 @@ export default function App() {
     <main
       data-theme={`${mode}-${activeTheme.name}`}
       data-theme-mode={mode}
+      data-activity-status={activityStatus}
+      data-activity-instance-id={activityContext?.instanceId}
+      data-activity-channel-id={activityContext?.channelId ?? undefined}
+      data-activity-guild-id={activityContext?.guildId ?? undefined}
       style={themeStyle}
       className="h-[100vh] w-[100vw] overflow-hidden bg-[var(--app-bg)] text-[var(--text-primary)] antialiased"
     >
@@ -105,7 +134,9 @@ export default function App() {
               E
             </div>
             <div>
-              <p className="max-[359px]:hidden text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">Voice room</p>
+              <p className="max-[359px]:hidden text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                {activityStatus === 'standalone' ? 'Web app' : 'Discord Activity'}
+              </p>
               <h1 className="text-sm font-semibold text-[var(--text-primary)]">ExcaliMath</h1>
             </div>
           </div>
@@ -136,9 +167,26 @@ export default function App() {
             <span className="sr-only" role="status" aria-live="polite">
               {mode === 'day' ? 'Day light mode' : 'Night dark mode'}, theme {activeTheme.name}
             </span>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-700/40 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-[var(--status-text)]">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="max-[359px]:hidden">Room live</span>
+            <div
+              title={[activityMessage, roomId ? `Room: ${roomId}` : 'No collaboration room selected'].filter(Boolean).join(' · ')}
+              role="status"
+              aria-live="polite"
+              className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] ${
+                roomSyncStatus === 'connected'
+                  ? 'border-emerald-700/40 bg-emerald-500/10 text-[var(--status-text)]'
+                  : 'border-black/15 bg-black/5 text-[var(--text-secondary)]'
+              }`}
+            >
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  roomSyncStatus === 'connected' ? 'bg-emerald-500' : 'bg-[var(--text-muted)]'
+                }`}
+              />
+              <span className="max-[359px]:hidden">
+                {roomStatusLabel[roomSyncStatus]}
+              </span>
+              <span className="sr-only">{activityStatus === 'ready' ? 'Discord Activity ready' : activityStatus}</span>
+              {activityMessage && <span className="sr-only">{activityMessage}</span>}
             </div>
           </div>
         </header>
@@ -164,14 +212,16 @@ export default function App() {
             </div>
           </aside>
 
-          <section className="relative min-h-[120px] min-w-0 flex-1 overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[var(--canvas-bg)] shadow-[0_0_80px_var(--accent-glow)] backdrop-blur-[1px] md:min-h-[240px]">
-            <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:28px_28px]" />
-
-            <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center pb-6">
-              <div className="rounded-full border border-black/10 bg-[var(--header-bg)] px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] shadow-lg shadow-black/10">
-                Collaborative sketch surface
-              </div>
-            </div>
+          <section
+            aria-label="Collaborative whiteboard"
+            className="relative min-h-[120px] min-w-0 flex-1 overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[var(--canvas-bg)] shadow-[0_0_80px_var(--accent-glow)] md:min-h-[240px]"
+          >
+            <Board
+              mode={mode}
+              roomId={roomId}
+              serverUrl={roomServerUrl}
+              onSyncStateChange={setRoomSyncStatus}
+            />
           </section>
         </div>
       </div>

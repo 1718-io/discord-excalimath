@@ -9,14 +9,17 @@ test('app shell fits the viewport without toolbar/canvas overlap', async ({ page
   });
 
   const app = page.locator('#storybook-root main');
-  const toolbar = app.locator('aside');
-  const canvas = app.locator('section');
+  const toolbar = app.locator('aside').filter({ hasText: 'Tools' });
+  const canvas = app.getByRole('region', { name: 'Collaborative whiteboard' });
+  const excalidrawBoard = app.getByTestId('excalidraw-board');
   const themeButton = app.getByRole('button', { name: /Choose a random .* theme/ });
   const modeButton = app.getByRole('button', { name: /Switch to night dark mode/ });
 
   await expect(app).toBeVisible({ timeout: 15_000 });
   await expect(toolbar).toBeVisible();
   await expect(canvas).toBeVisible();
+  await expect(excalidrawBoard).toBeVisible();
+  await expect(excalidrawBoard.getByTestId('main-menu-trigger')).toHaveAccessibleName('Open Excalidraw menu');
   await expect(themeButton).toBeVisible();
 
   expect(await app.getAttribute('data-theme-mode')).toBe('day');
