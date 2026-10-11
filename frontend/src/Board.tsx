@@ -8,6 +8,9 @@ import type {
   ExcalidrawProps,
 } from '@excalidraw/excalidraw/types';
 import '@excalidraw/excalidraw/index.css';
+import { ExcaliMath } from "@excalimath/core";
+/* ADD THIS LINE DIRECTLY HERE AS WELL TO DOUBLE-CHECK INJECTION */
+import 'katex/dist/katex.min.css'; 
 
 type BoardTheme = 'day' | 'night';
 export type BoardSyncStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'error';
@@ -357,6 +360,23 @@ export default function Board({ mode, roomId, serverUrl, onSyncStateChange }: Bo
             toggleTheme: false,
           },
         }}
+        // renderTopRightUI
+        gridModeEnabled={true}
+        isCollaborating={roomId !== undefined}
+        
+        renderTopRightUI={(isMobile = true) => {
+          const api = apiRef.current;
+          return (api ? (
+            <ExcaliMath
+              excalidrawAPI={api}
+              enabledPlugins={["equation", "graph", "library"]}
+              theme="auto"
+              onSave={(data) => console.log("Saved:", data)}
+
+
+            />
+          ) : null) }
+        }
       />
     </div>
   );

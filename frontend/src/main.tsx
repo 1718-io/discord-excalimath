@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import ActivityEntry from './ActivityEntry';
 import './index.css';
+/* Add this line below to load the math styling definitions globally */
+import 'katex/dist/katex.min.css';
 
 const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
 const isEmbedded = window.self !== window.top;

@@ -1,5 +1,11 @@
 # AI Development Setup Documentation
 
+## WARNING 
+
+After many tries, i could only understand that using free models on openrouter is just not possibe, it can work for a few minutes on best case, and quickly becomes impossible.
+
+This is why i will try a different setup.
+
 ## Overview
 This document explains how to configure the VS Code Continue.dev extension with OpenRouter for contributing to the Discord ExcaliMath project. Continue.dev provides AI-powered development assistance and code editing capabilities.
 

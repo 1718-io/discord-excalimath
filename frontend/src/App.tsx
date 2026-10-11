@@ -1,8 +1,9 @@
 import { useState, type CSSProperties } from 'react';
 import { Dices, Moon, Sun } from 'lucide-react';
 import Board, { type BoardSyncStatus } from './Board';
+import ToolsSideBar from './ToolsSideBar';
 
-const toolbarItems = ['Pen', 'Text', 'Shapes', 'Math', 'Erase'];
+
 
 const themeFamilies = [
   { name: 'Crimson', hue: 350 },
@@ -192,25 +193,9 @@ export default function App({
         </header>
 
         <div className="relative z-10 flex flex-1 flex-col gap-3 overflow-hidden p-3 pb-4 sm:gap-4 sm:p-5 max-[359px]:gap-2 max-[359px]:p-2 md:flex-row">
-          <aside className="w-full shrink-0 rounded-2xl border border-black/10 bg-[var(--panel-bg)] p-3 shadow-2xl shadow-black/10 backdrop-blur-sm md:w-[220px]">
-            <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)] md:mb-3">
-              <span>Tools</span>
-              <span>12</span>
-            </div>
-
-            <div className="flex flex-row flex-wrap gap-2 max-[359px]:gap-1 md:flex-col">
-              {toolbarItems.map((tool) => (
-                <button
-                  key={tool}
-                  type="button"
-                  className="flex min-w-0 flex-1 items-center justify-between rounded-xl border border-black/10 bg-[var(--tool-bg)] px-3 py-2 text-left text-sm text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--text-primary)] max-[420px]:justify-center max-[420px]:px-1 max-[420px]:text-xs md:flex-initial md:min-w-0 md:justify-between md:px-3 md:text-sm"
-                >
-                  <span className="max-[420px]:hidden md:inline">{tool}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">{tool[0]}</span>
-                </button>
-              ))}
-            </div>
-          </aside>
+          {
+            // <ToolsSideBar mode={mode} toolbarItems={['Pen', 'Text', 'Shapes', 'Math', 'Erase']} />
+          }
 
           <section
             aria-label="Collaborative whiteboard"

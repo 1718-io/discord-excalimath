@@ -28,8 +28,18 @@ const initializeDiscordActivity = (): Promise<SettledActivityState> => {
     }
 
     try {
+      console.log('[Activity] Loading Discord SDK');
+
       const { DiscordSDK } = await import('@discord/embedded-app-sdk');
+
+      console.log('[Activity] SDK imported');
+
       const discordSdk = new DiscordSDK(clientId);
+
+      console.log('[Activity] Waiting for SDK ready');
+
+      // const { DiscordSDK } = await import('@discord/embedded-app-sdk');
+      // const discordSdk = new DiscordSDK(clientId);
       await discordSdk.ready();
 
       return {

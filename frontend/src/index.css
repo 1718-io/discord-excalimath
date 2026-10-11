@@ -31,3 +31,69 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* ==========================================================================
+   THE DEFENSE CLOSURE: EXCALIDRAW SIDEBAR CONTAINER LEVEL ELEVATION
+   ========================================================================== */
+
+/* 
+  1. Use the ':has()' selector to find Excalidraw's internal container panel 
+     that is actively hosting the math tool, and elevate that ENTIRE container 
+     above the sibling container holding the footer toolbar.
+*/
+[data-testid="excalidraw-board"] .excalidraw .FixedSideContainer:has(.excalimath-sidebar),
+[data-testid="excalidraw-board"] .excalidraw .FixedSideContainer:has([class*="excalimath-"]) {
+  z-index: 99999 !important; /* Lifts the parent slot above the footer slot */
+}
+
+/* 
+  2. Clear out any bounding box boundaries so that dropdown expansion cards 
+     can stream downwards past the traditional panel limits.
+*/
+[data-testid="excalidraw-board"],
+[data-testid="excalidraw-board"] .excalidraw,
+[data-testid="excalidraw-board"] .excalidraw .layer-ui-container,
+[data-testid="excalidraw-board"] .excalidraw .FixedSideContainer {
+  overflow: visible !important;
+}
+
+/* 
+  3. Max out the specific inline priority targets for the math components
+*/
+body .excalimath-sidebar,
+body div.excalimath-sidebar,
+.excalimath-menu-popup,
+.excalimath-modal,
+[class*="excalimath-"] {
+  z-index: 99999999 !important;
+}
+
+/* 
+  4. Explicitly demote the footer bar so it steps out of the way
+*/
+[data-testid="excalidraw-board"] .excalidraw .App-toolbar,
+[data-testid="excalidraw-board"] footer.App-toolbar {
+  z-index: 1 !important;
+}
+/* ==========================================================================
+   FIX FOR KATEX EMPTY BOX SYMBOLS
+   ========================================================================== */
+
+/* 
+  Force the visible math elements to display, overriding the library's 
+  internal default 'display: none' restriction.
+*/
+.excalimath-sidebar .katex-html,
+[data-testid="excalidraw-board"] .katex-html,
+.katex .katex-html {
+  display: block !important;
+}
+
+/* 
+  Hide the raw MathML text so code blocks don't overlap or double-render
+*/
+.excalimath-sidebar .katex-mathml,
+[data-testid="excalidraw-board"] .katex-mathml,
+.katex .katex-mathml {
+  display: none !important;
+}
