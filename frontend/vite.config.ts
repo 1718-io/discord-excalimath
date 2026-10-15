@@ -13,7 +13,9 @@ export default defineConfig({
       '127.0.0.1',
       'olive-points-travel.loca.lt',
       'good-worms-wait.loca.lt',
-      'jazz-venice-compliant-matter.trycloudflare.com'
+      'participant-cow-motorcycle-following.trycloudflare.com',
+      'hughes-writers-belle-null.trycloudflare.com',
+      '*.trycloudflare.com'
     ],
     // Add this headers block to bypass the ngrok interstitial warning page
     // Add the localtunnel programmatic bypass header right here

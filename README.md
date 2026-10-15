@@ -1,5 +1,7 @@
 # Discord ExcaliMath
 
+![Doomsday](./documentation/design/discord/images/ExcaliMath_Doomsday.png)
+
 ## Try it locally
 
 * Start backend:
