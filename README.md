@@ -17,6 +17,7 @@ pnpm dev
 
 ```bash
 cd frontend
+export VITE_DISCORD_CLIENT_ID=****************
 export VITE_ROOM_SERVER_URL=ws://127.0.0.1:6998
 pnpm dev
 ```

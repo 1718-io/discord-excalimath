@@ -61,7 +61,20 @@ const fingerprint = (scene: SceneSnapshot): string => JSON.stringify(scene);
 
 const normalizeRoomId = (roomId: string): string => roomId.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 128);
 
+
 const getRoomServerUrl = (configuredUrl?: string): string | null => {
+  // Discord Activity: connect through Discord's URL mapping proxy.
+  const isEmbedded = window.self !== window.top;
+
+  if (isEmbedded) {
+    return `${window.location.origin.replace(/^https:/, 'wss:')}/backend`;
+  }
+  /**
+   * This code assumes the /backend mapping is configured in discord activity URL Settings. If you used a different prefix, change /backend to match it.
+Also, the URL-mapping proxy must support WebSocket connections for this approach to work. If the next console error still mentions CSP or WebSocket connection failure, paste that error here before making any further changes.
+   */
+
+  // Standalone app: use the configured WebSocket server directly.
   if (configuredUrl || import.meta.env.VITE_ROOM_SERVER_URL) {
     return configuredUrl ?? import.meta.env.VITE_ROOM_SERVER_URL ?? null;
   }
@@ -121,6 +134,7 @@ export default function Board({ mode, roomId, serverUrl, onSyncStateChange }: Bo
   );
 
   useEffect(() => {
+
     const boardRoot = boardRef.current;
     if (!boardRoot) {
       return;
@@ -141,6 +155,14 @@ export default function Board({ mode, roomId, serverUrl, onSyncStateChange }: Bo
   }, []);
 
   useEffect(() => {
+    
+    console.info('[Board] Sync effect started', {
+      roomId,
+      serverUrl,
+      hostname: window.location.hostname,
+      configuredRoomServerUrl: import.meta.env.VITE_ROOM_SERVER_URL,
+    });
+    
     if (!roomId) {
       updateSyncStatus('idle');
       return;

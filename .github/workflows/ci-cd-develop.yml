@@ -1,0 +1,38 @@
+name: Develop CI/CD & Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test-and-deploy:
+    name: Test and Deploy to Render
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests on develop
+        run: pnpm test
+
+      - name: Trigger Render Deployment
+        if: success()
+        run: |
+          echo "Tests passed on develop! Triggering Render deployment..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

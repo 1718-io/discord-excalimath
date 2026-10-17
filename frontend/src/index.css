@@ -97,3 +97,35 @@ body div.excalimath-sidebar,
 .katex .katex-mathml {
   display: none !important;
 }
+
+
+/**
+  * ==========================================================================
+  *  TERMS OF SERVICE AND PRIVACY POLICY PAGE STYLING
+  *  ========================================================================== 
+  */
+
+/* Custom Modern Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155; /* slate-700 */
+  border-radius: 9999px;
+  border: 2px solid #0f172a; /* slate-900 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569; /* slate-600 */
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}

@@ -1,0 +1,49 @@
+name: PR Test Suite & Report
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  run-tests:
+    name: Run Tests & Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Run tests and output a TAP/JUnit report file for the reporter action
+      - name: Run unit & integration tests
+        run: |
+          mkdir -p test-results
+          pnpm test -- --reporter=tap > test-results/results.tap
+        continue-on-error: true # Let the reporter capture failures gracefully
+
+      - name: Publish Test Report to PR
+        uses: dorny/test-reporter@v1
+        if: github.event_name == 'pull_request'
+        with:
+          name: Node.js Test Results
+          path: test-results/results.tap
+          reporter: tap
+          fail-on-error: true

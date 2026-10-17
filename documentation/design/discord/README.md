@@ -69,3 +69,12 @@ If the link is in a channem of a server, and the user clicking it is an admin, t
 ![dev mode 1](./images/discord-app-testing-tunnel-setup7.PNG)
 
 ![dev mode 1](./images/discord-app-testing-tunnel-setup8.PNG)
+
+
+## ANNEX Step Allowed Origins — Allow your WebSocket server in Discord's configuration
+
+You need to authorize excali-math-backend.onrender.com in the configuration for your Discord Activity.
+1. Open the Discord Developer Portal.
+2. Select your ExcaliMath application.
+3. Find the Activities section in the application's settings.
+4. Look for the URL-mapping, allowed-origin, or networking configuration for the Activity.

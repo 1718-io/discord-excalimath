@@ -1,0 +1,11 @@
+# Each line is a file pattern followed by one or more GitHub usernames or @org/team-names.
+
+# 1. Default owners for the entire repository
+* @Jean-Baptiste-Lasselle
+
+# 2. Specific backend source files
+/src/ @backend-lead @1718-io/core-dev-team
+
+# 3. Workflow and infrastructure files
+.github/workflows/ @devops-engineer
+*.yaml @devops-engineer

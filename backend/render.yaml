@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: excali-math-backend
+    runtime: node
+    rootDir: backend
+    region: oregon # Change to your preferred region (e.g., frankfurt, ohio, oregon)
+    plan: starter # Use 'starter' or higher so WebSockets don't drop due to free-tier sleep mode
+    buildCommand: npm install -g pnpm && pnpm install --frozen-lockfile && pnpm run build && ls -alh ./dist
+    startCommand: pnpm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /health

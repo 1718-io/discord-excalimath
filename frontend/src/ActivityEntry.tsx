@@ -36,11 +36,17 @@ const initializeDiscordActivity = (): Promise<SettledActivityState> => {
 
       const discordSdk = new DiscordSDK(clientId);
 
+      console.log('[Activity] SDK constructed', {
+        hasClientId: Boolean(clientId),
+        clientId,
+      });
+
       console.log('[Activity] Waiting for SDK ready');
 
       // const { DiscordSDK } = await import('@discord/embedded-app-sdk');
       // const discordSdk = new DiscordSDK(clientId);
       await discordSdk.ready();
+      console.log('[Activity] SDK ready resolved');
 
       return {
         status: 'ready',
@@ -49,6 +55,7 @@ const initializeDiscordActivity = (): Promise<SettledActivityState> => {
         guildId: discordSdk.guildId,
       };
     } catch (error) {
+      console.error('[Activity] Initialization failed:', error);
       return {
         status: 'unavailable',
         reason:

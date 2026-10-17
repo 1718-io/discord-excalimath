@@ -158,11 +158,13 @@ export const createRoomServer = async (
     logger.info(
       `[rooms] connected ${clientId} from ${request.socket.remoteAddress ?? "unknown"}`,
     );
+    connectedClients.inc(1)
 
     socket.on("message", (data) => {
       let rawMessage: unknown;
       try {
         rawMessage = decodeMessage(data);
+        receivedMessages.inc(1)
       } catch {
         send(socket, {
           type: "error",
@@ -200,6 +202,7 @@ export const createRoomServer = async (
 
         if (joinedRoomId) {
           rooms.leave(joinedRoomId, clientId);
+          activeRooms.dec(1)
         }
         joinedRoomId = message.roomId;
         const state = rooms.join(joinedRoomId, { clientId, socket });
@@ -212,6 +215,8 @@ export const createRoomServer = async (
           scene: state.scene,
         });
         logger.info(`[rooms] ${clientId} joined ${joinedRoomId}`);
+        // connectedClients.inc(1)
+        activeRooms.inc(1)
         return;
       }
 
@@ -245,6 +250,7 @@ export const createRoomServer = async (
         rooms.leave(joinedRoomId, clientId);
         logger.info(`[rooms] ${clientId} left ${joinedRoomId}`);
       }
+      connectedClients.dec(1)
     });
 
     socket.on("error", (error) => {

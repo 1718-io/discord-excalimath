@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+  ],
   server: {
     host: '0.0.0.0',
     port: 5173,
@@ -15,6 +17,8 @@ export default defineConfig({
       'good-worms-wait.loca.lt',
       'participant-cow-motorcycle-following.trycloudflare.com',
       'hughes-writers-belle-null.trycloudflare.com',
+        'excali-math-backend.onrender.com',
+        'discord-excalimath.pages.dev',
       '*.trycloudflare.com'
     ],
     // Add this headers block to bypass the ngrok interstitial warning page
@@ -24,7 +28,8 @@ export default defineConfig({
       'bypass-tunnel-reminder': 'true'
     }
   },
-  build: {
+  build: {// Generates .js.map files alongside your production bundles
+    sourcemap: true,
     // Ensure small font files aren't converted to inline base64 strings.
     // Inlining fonts can sometimes trigger Content Security Policy (CSP) issues in the Discord iframe.
     assetsInlineLimit: 0,
