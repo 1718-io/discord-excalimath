@@ -1,0 +1,44 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#171329"/>
+      <stop offset="100%" stop-color="#30204e"/>
+    </linearGradient>
+    <linearGradient id="veil" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#171329" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#171329" stop-opacity="0.40"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" rx="24" fill="url(#background)"/>
+
+  <image
+    href="https://raw.githubusercontent.com/1718-io/discord-excalimath/develop/documentation/design/discord/images/ExcaliMath_Doomsday.png"
+    x="0" y="0" width="1200" height="420"
+    preserveAspectRatio="xMidYMid slice"
+    opacity="0.24"/>
+
+  <rect width="1200" height="420" rx="24" fill="url(#veil)"/>
+
+  <rect x="54" y="48" width="5" height="324" rx="2.5" fill="#b99aff"/>
+
+  <g font-family="Arial, Helvetica, sans-serif" fill="#ffffff">
+    <text x="88" y="105" font-size="19" letter-spacing="5" fill="#cbb5ff">MATHÉMATIQUES COLLABORATIVES</text>
+
+    <text x="84" y="202" font-size="76" font-weight="700">ExcaliMath</text>
+
+    <text x="88" y="256" font-size="25" fill="#eee7ff">
+      Un tableau. Plusieurs esprits.
+    </text>
+    <text x="88" y="291" font-size="25" fill="#eee7ff">
+      Des mathématiques.
+    </text>
+
+    <path d="M88 324 H260" stroke="#b99aff" stroke-width="3" stroke-linecap="round"/>
+
+    <text x="88" y="359" font-size="17" fill="#d8c9f5">
+      Chercher · Démontrer · Comprendre · Partager
+    </text>
+  </g>
+</svg>

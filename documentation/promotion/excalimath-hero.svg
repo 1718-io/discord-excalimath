@@ -1,0 +1,110 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#100d20"/>
+      <stop offset="55%" stop-color="#211638"/>
+      <stop offset="100%" stop-color="#392052"/>
+    </linearGradient>
+
+    <radialGradient id="glow">
+      <stop offset="0%" stop-color="#a779ff" stop-opacity=".32"/>
+      <stop offset="100%" stop-color="#a779ff" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="sigma" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#dfc9ff"/>
+      <stop offset="100%" stop-color="#a879ff"/>
+    </linearGradient>
+
+    <linearGradient id="veil" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#100d20" stop-opacity=".05"/>
+      <stop offset="100%" stop-color="#100d20" stop-opacity=".50"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+
+  <!-- Cinematic background -->
+  <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
+
+  <!-- Original artwork as a subtle watermark -->
+  <image
+    href="https://raw.githubusercontent.com/1718-io/discord-excalimath/develop/documentation/design/discord/images/ExcaliMath_Doomsday.png"
+    x="0" y="0" width="1200" height="420"
+    preserveAspectRatio="xMidYMid slice"
+    opacity=".13"/>
+
+  <rect width="1200" height="420" rx="24" fill="url(#veil)"/>
+
+  <!-- Ambient light behind the mathematical symbol -->
+  <ellipse cx="895" cy="205" rx="285" ry="255" fill="url(#glow)"/>
+
+  <!-- Fine mathematical grid -->
+  <g stroke="#c9aaff" stroke-width="1" opacity=".09">
+    <path d="M650 0V420 M710 0V420 M770 0V420 M830 0V420 M890 0V420 M950 0V420 M1010 0V420 M1070 0V420 M1130 0V420"/>
+    <path d="M650 50H1200 M650 110H1200 M650 170H1200 M650 230H1200 M650 290H1200 M650 350H1200"/>
+  </g>
+
+  <!-- Large sigma symbol -->
+  <text
+    x="895" y="290"
+    text-anchor="middle"
+    font-family="Cambria Math, STIX Two Math, Georgia, serif"
+    font-size="330"
+    font-weight="400"
+    fill="#b48aff"
+    opacity=".45"
+    filter="url(#softGlow)">Σ</text>
+
+  <text
+    x="895" y="290"
+    text-anchor="middle"
+    font-family="Cambria Math, STIX Two Math, Georgia, serif"
+    font-size="330"
+    font-weight="400"
+    fill="url(#sigma)">Σ</text>
+
+  <!-- Elegant framing line -->
+  <rect x="66" y="62" width="4" height="296" rx="2" fill="#bb94ff"/>
+
+  <!-- Brand typography -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="100" y="105"
+      font-size="17"
+      font-weight="700"
+      letter-spacing="5"
+      fill="#cbb1ff">MATHÉMATIQUES COLLABORATIVES</text>
+
+    <text x="94" y="205"
+      font-size="76"
+      font-weight="700"
+      letter-spacing="-2"
+      fill="#ffffff">ExcaliMath</text>
+
+    <text x="100" y="259"
+      font-size="25"
+      fill="#eee5ff">Un tableau. Plusieurs esprits.</text>
+
+    <text x="100" y="294"
+      font-size="25"
+      fill="#eee5ff">Des mathématiques.</text>
+
+    <rect x="100" y="320" width="110" height="3" rx="1.5" fill="#b995ff"/>
+
+    <text x="100" y="356"
+      font-size="16"
+      letter-spacing="1"
+      fill="#d1c1eb">CHERCHER · DÉMONTRER · COMPRENDRE · PARTAGER</text>
+  </g>
+
+  <!-- Minimal decorative mathematical notation -->
+  <g font-family="Cambria Math, Georgia, serif" fill="#dfccff" opacity=".42">
+    <text x="1080" y="90" font-size="28">∫</text>
+    <text x="1110" y="345" font-size="24">∞</text>
+    <text x="755" y="365" font-size="21">∂</text>
+  </g>
+</svg>
