@@ -33,6 +33,9 @@ export default defineConfig({
     // Ensure small font files aren't converted to inline base64 strings.
     // Inlining fonts can sometimes trigger Content Security Policy (CSP) issues in the Discord iframe.
     assetsInlineLimit: 0,
+    // REMOVE assetsInlineLimit: 0, or set it high enough (e.g., 50000) 
+    // so Vite base64-inlines the font files into your CSS bundle:
+    // assetsInlineLimit: 50000, 
     rollupOptions: {
       output: {
         // Keeps asset names clean and easy for the browser to find
