@@ -8,7 +8,7 @@ import type {
   ExcalidrawProps,
 } from '@excalidraw/excalidraw/types';
 import '@excalidraw/excalidraw/index.css';
-import { ExcaliMath } from "@excalimath/core";
+import { ExcaliMath } from "@1718-io/excalimath-core";
 
 type ToolsSideBarTheme = 'day' | 'night';
 export type BoardSyncStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'error';

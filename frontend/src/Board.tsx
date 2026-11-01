@@ -8,7 +8,7 @@ import type {
   ExcalidrawProps,
 } from '@excalidraw/excalidraw/types';
 import '@excalidraw/excalidraw/index.css';
-import { ExcaliMath } from "@excalimath/core";
+import { ExcaliMath } from "@1718-io/excalimath-core";
 /* ADD THIS LINE DIRECTLY HERE AS WELL TO DOUBLE-CHECK INJECTION */
 import 'katex/dist/katex.min.css'; 
 

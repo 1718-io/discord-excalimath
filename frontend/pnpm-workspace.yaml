@@ -6,3 +6,7 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - lucide-react@1.55.0
+  - '@1718-io/excalimath-core@1.1.1-dev.0'
+
+overrides:
+  '@excalimath/core': link:../../excalimath/packages/core
