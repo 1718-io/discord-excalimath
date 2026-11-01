@@ -1,6 +1,6 @@
 # KaTeX Font-Class Support Test Suite
 
-This document provides a comprehensive test suite for validating support of the following KaTeX font classes:
+This document provides a comprehensive test suite for validating extended support of the following KaTeX font classes:
 
 - `.mathbb`
 - `.mathcal`
