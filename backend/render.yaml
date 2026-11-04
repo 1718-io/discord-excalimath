@@ -4,7 +4,8 @@ services:
     runtime: node
     rootDir: backend
     region: oregon # Change to your preferred region (e.g., frankfurt, ohio, oregon)
-    plan: starter # Use 'starter' or higher so WebSockets don't drop due to free-tier sleep mode
+    plan: free # Use 'free' nothign else or it will get billed, we don't care about the sleep mode since we are using a free-tier plan
+    # plan: starter # Use 'starter' or higher so WebSockets don't drop due to free-tier sleep mode
     buildCommand: npm install -g pnpm && pnpm install --frozen-lockfile && pnpm run build && ls -alh ./dist
     startCommand: pnpm run start
     envVars:

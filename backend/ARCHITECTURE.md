@@ -225,5 +225,16 @@ pnpm add -g wscat
 $ wscat -c wss://excali-math-backend.onrender.com
 ok
 > {"type":"error","code":"invalid_json","message":"Message must be valid JSON."}
+
+$ wscat -P -c wss://discord-excalimath.onrender.com
+{ type": "room:join", "roomId": 0 }
+> {"type":"error","code":"invalid_json","message":"Message must be valid JSON."}
+{ "type": "room:join", "roomId": 0 }
+> {"type":"error","code":"invalid_json","message":"Message must be valid JSON."}
+{ "type": room:join", "roomId": "0" }
+> {"type":"error","code":"invalid_json","message":"Message must be valid JSON."}
+{ "type": "room:join", "roomId": "0" }
+> {"type":"room:joined","roomId":"0","clientId":"852e727c-2173-46f7-85d9-a8ecc7fceba9","peers":[],"revision":0,"scene":null}
+
 ```
 
